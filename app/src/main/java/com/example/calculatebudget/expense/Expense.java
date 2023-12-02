@@ -65,7 +65,7 @@ public class Expense extends operationsWithBudget {
     public double allWeekExpense(){//витрати за всі тижні
         double allWeekEx = 0.0;
 
-        for(int i = 0;i<=4;i++){
+        for(int i = 1;i<=5;i++){
             allWeekEx = allWeekEx + getValueExpenseForWeek(i);
         }
 
@@ -73,14 +73,10 @@ public class Expense extends operationsWithBudget {
     }
     @Override
     public int percentageWeak(int week){//проценти за тиждень(вход з тижнем)
-        int percentage = 0;
-        int weekNow = week;
-        float valueFWeek;
+
+        float valueFWeek = getValueExpenseForWeek(week);
         double savedBudget = getValBudget();
-
-        valueFWeek = getValueExpenseForWeek(weekNow);
-
-        percentage = (int) (valueFWeek*100/savedBudget);
+        int percentage = (int) (valueFWeek*100/savedBudget);
 
         return percentage;
     }

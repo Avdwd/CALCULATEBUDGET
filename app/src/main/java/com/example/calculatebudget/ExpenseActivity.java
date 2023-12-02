@@ -27,11 +27,14 @@ public class ExpenseActivity extends AppCompatActivity {
         this.context = this;
         thisExpense = new Expense(this);
         checkOrCreatePerc();
-
+        checkAndSavePercentData();
     }
     protected void onStart() {
         super.onStart();
-
+    }
+    protected void onPause() {
+        checkAndSavePercentData();
+        super.onPause();
     }
 
     protected void onStop() {
@@ -69,20 +72,22 @@ public class ExpenseActivity extends AppCompatActivity {
             this.persent = context.getSharedPreferences("Persent", Context.MODE_PRIVATE);
         }
     }
-
+//записти обрахунок тижня
     private void savePerсentOFWeek(){
-        for(int i= 0;i<=4;i++){
+        for(int i= 1;i<=5;i++){
             String key = String.valueOf(i);
+            int percent = thisExpense.percentageWeak(i);
             SharedPreferences.Editor percentEditor = persent.edit();
-            percentEditor.putInt(key,thisExpense.percentageWeak(i));
+            percentEditor.putInt(key,percent);
             percentEditor.apply();
         }
     }
-
+    // написати обрахунок місяця
     private void savePercentMonth(){
         String keyMonth = "month";
+        int monthPerc = thisExpense.percentageMonth();
         SharedPreferences.Editor percentEditor = persent.edit();
-        percentEditor.putInt(keyMonth,thisExpense.percentageMonth());
+        percentEditor.putInt(keyMonth,monthPerc);
         percentEditor.apply();
     }
 
