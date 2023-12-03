@@ -4,20 +4,21 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 
-import com.example.calculatebudget.operationsBudget.operationsWithBudget;
+import com.example.calculatebudget.operationsBudget.OperationsExpense;
 
 
 import java.util.Calendar;
 
 
-public class Expense extends operationsWithBudget {
+public class Expense extends OperationsExpense {
     private double expense;// витрати
     private Calendar calendar = Calendar.getInstance(); // отримання календаря
     private int WeekOfMonth ;//для тижня
     private SharedPreferences Expense;//для даних витрат в пам'яті
     private Context context;//для створення файлу та доступу до нього
 
-    public Expense(Context context){//конструктор
+    public Expense(Context context){
+        //конструктор
         this.context = context;
         this.Expense = context.getSharedPreferences("ExpensePrefs", Context.MODE_PRIVATE);// назва файлу
         this.expense = getExpense();
@@ -29,7 +30,7 @@ public class Expense extends operationsWithBudget {
 
     public double getExpense(){return getValueExpense();}//гетер
 
-    private float getValueExpense(){//отримання значення по тижням
+    private float getValueExpense(){//отримання значення на даний тиждень
         String key = getWeekOfMonth();
         if (Expense != null) {
             return Expense.getFloat(key, 0);
@@ -37,6 +38,7 @@ public class Expense extends operationsWithBudget {
             return 0;
         }
     }
+
     private void saveExpense(){//збереження значення витрати
         String key = getWeekOfMonth();
         if (!hasExpensesForCurrentWeek()) {//якщо на цьому тижні ще не було витрат
@@ -63,35 +65,12 @@ public class Expense extends operationsWithBudget {
     }
     @Override
     public double allWeekExpense(){//витрати за всі тижні
-        double allWeekEx = 0.0;
-
+        double allWeekEx = 0;
         for(int i = 1;i<=5;i++){
             allWeekEx = allWeekEx + getValueExpenseForWeek(i);
         }
-
         return allWeekEx;
     }
-    @Override
-    public int percentageWeak(int week){//проценти за тиждень(вход з тижнем)
-
-        float valueFWeek = getValueExpenseForWeek(week);
-        double savedBudget = getValBudget();
-        int percentage = (int) (valueFWeek*100/savedBudget);
-
-        return percentage;
-    }
-
-
-
-    @Override
-    public int percentageMonth(){//процент за всі тижні відносно бюджету
-        int percent = 0;
-        float valueMonth = (float) allWeekExpense();
-        double savedBudget = getValBudget();
-        percent = (int)(valueMonth*100/savedBudget);
-        return percent;
-    }
-
 
     private boolean hasExpensesForCurrentWeek() {//перевірка на наявність витрат
         String currentWeekKey = getWeekOfMonth();
@@ -101,9 +80,11 @@ public class Expense extends operationsWithBudget {
 
     private float getValueExpenseForWeek(int week){//отриманя значення для певного тижня
         String key = String.valueOf(week);
-
+        Expense = context.getSharedPreferences("ExpensePrefs", Context.MODE_PRIVATE);
+        float value;
         if (Expense != null) {
-            return Expense.getFloat(key, 0);
+            value  =  Expense.getFloat(key, 0f);
+            return value;
         } else {
             return 0;
         }
@@ -114,12 +95,6 @@ public class Expense extends operationsWithBudget {
         String key = String.valueOf(WeekOfMonth);
 
         return key;
-    }
-
-    private double getValBudget(){// значення бюджету
-        SharedPreferences sharedPreferences = context.getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
-        double savedBudget = sharedPreferences.getFloat("ITS_BUDGET", 0.0f);
-        return savedBudget;
     }
 
 }
