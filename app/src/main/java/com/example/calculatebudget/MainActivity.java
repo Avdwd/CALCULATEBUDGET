@@ -11,16 +11,17 @@ import android.view.View;
 import android.widget.TextView;
 
 import java.io.File;
+import java.util.Calendar;
 // додати перевірку місяця (інший місяць =  всі дані стають 0 в activity main )
 
 public class MainActivity extends AppCompatActivity {
-
+    private Calendar calendar = Calendar.getInstance(); // отримання календаря
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        checkAndUpdateMonth();
     }
     @Override
     protected void onStart() {
@@ -61,5 +62,47 @@ public class MainActivity extends AppCompatActivity {
             String budgetShow = String.valueOf(savedBudget);
             textBudget.setText("Ваш бюджет = " + budgetShow);
         }
+    }
+
+
+    // можна пізніше перенести це все в інший клас наприклад в бюджет а також операції з датами також в інший клас
+
+
+    //скидування даних при зміні місяця
+    private void checkAndUpdateMonth() {
+        SharedPreferences sharedPreferences = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+        int savedMonth;
+
+        if (sharedPreferences.contains("CURRENT_MONTH")) {
+            savedMonth = sharedPreferences.getInt("CURRENT_MONTH", -1);
+        } else {
+            savedMonth = calendar.get(Calendar.MONTH);
+            updateCurrentMonth(savedMonth);
+        }
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        if (savedMonth != currentMonth) {
+            // Якщо місяць не співпадає, обнулити дані та оновити місяць
+            resetAllData();
+            updateCurrentMonth(currentMonth);
+        }
+    }
+
+    private void resetAllData() {
+        SharedPreferences.Editor budgetEditor = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE).edit();
+        budgetEditor.clear();
+        budgetEditor.apply();
+        SharedPreferences.Editor expenseEditor = getSharedPreferences("ExpensePrefs", Context.MODE_PRIVATE).edit();
+        expenseEditor.clear();
+        expenseEditor.apply();
+        SharedPreferences.Editor percentEditor = getSharedPreferences("Persent", Context.MODE_PRIVATE).edit();
+        percentEditor.clear();
+        percentEditor.apply();
+    }
+
+    private void updateCurrentMonth(int currentMonth) {
+        SharedPreferences.Editor editor = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE).edit();
+        editor.putInt("CURRENT_MONTH", currentMonth);
+        editor.apply();
     }
 }

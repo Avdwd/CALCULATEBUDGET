@@ -2,7 +2,7 @@ package com.example.calculatebudget.budget;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-// додати перевірку місяця (інший місяць =  всі дані стають 0)
+
 public class Budget {
     private double budget;
     private SharedPreferences setBudget;

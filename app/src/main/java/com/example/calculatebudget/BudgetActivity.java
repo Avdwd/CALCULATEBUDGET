@@ -14,11 +14,14 @@ import android.widget.Toast;
 import com.example.calculatebudget.budget.Budget;
 
 import java.io.File;
+import java.util.Calendar;
 
 
 public class BudgetActivity extends AppCompatActivity {
     private Budget budgetForM;
     private Button buttonAddBudget;
+    private Calendar calendar = Calendar.getInstance();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,7 +30,7 @@ public class BudgetActivity extends AppCompatActivity {
         budgetForM = new Budget(this);
         buttonAddBudget = findViewById(R.id.buttonAddBudget);
         budgetShowFun();
-
+        checkAndUpdateButton();
     }
     @Override
     protected void onStart() {
@@ -83,9 +86,14 @@ public class BudgetActivity extends AppCompatActivity {
 
     private boolean isBudgetCreate(){
         File file = new File(getFilesDir().getParent() + "/shared_prefs/BudgetPrefs.xml");
+        boolean flag = false;
         if(file.exists()) {
-            return true;
-        } else return false;
+            SharedPreferences sharedPreferences = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+            if(sharedPreferences.contains("ITS_BUDGET")){
+                flag = true;
+            }
+        }
+        return flag;
     }
     private void budgetShowFun(){
         if(isBudgetCreate()){
@@ -98,4 +106,13 @@ public class BudgetActivity extends AppCompatActivity {
         }
     }
 
+    private void checkAndUpdateButton() {
+        SharedPreferences sharedPreferences = getSharedPreferences("BudgetPrefs", Context.MODE_PRIVATE);
+        int savedMonth=sharedPreferences.getInt("CURRENT_MONTH", -1);
+        int currentMonth = calendar.get(Calendar.MONTH);
+
+        if (savedMonth != currentMonth) {
+            buttonAddBudget.setClickable(true);
+        }
+    }
 }
