@@ -1,7 +1,7 @@
 package com.example.calculatebudget;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+
 
 import android.content.Context;
 import android.content.Intent;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.util.Calendar;
-// додати перевірку місяця (інший місяць =  всі дані стають 0 в activity main )
+
 
 public class MainActivity extends AppCompatActivity {
     private Calendar calendar = Calendar.getInstance(); // отримання календаря

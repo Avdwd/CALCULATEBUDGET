@@ -11,7 +11,7 @@
         android:layout_width="228dp"
         android:layout_height="50dp"
         android:layout_marginTop="52dp"
-        android:text="Тут ви можете додавати ваші витрати"
+        android:text="@string/YouCanAddExpense"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -24,7 +24,7 @@
         android:layout_height="71dp"
         android:layout_marginTop="32dp"
         android:ems="10"
-        android:hint="Введіть витрати"
+        android:hint="@string/EditExpense"
         android:inputType="numberDecimal"
 
         app:layout_constraintEnd_toEndOf="@+id/expenseShow"
@@ -37,7 +37,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:onClick="addExpense"
-        android:text="Додати"
+        android:text="@string/SubmitExpense"
         app:layout_constraintEnd_toEndOf="@+id/editExpense"
         app:layout_constraintStart_toStartOf="@+id/editExpense"
         app:layout_constraintTop_toBottomOf="@+id/editExpense" />
